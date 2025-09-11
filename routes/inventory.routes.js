@@ -13,70 +13,103 @@ router.get("/", validateToken, async (req, res, next) => {
   }
 });
 
-// //GET api/orders/:orderId
-// router.get("/:orderId", validateToken, async (req, res, next) => {
-//   try {
-//     const orderId = req.params.orderId;
-//     response = await Order.findById(orderId);
-//     res.status(200).json(response);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+//GET api/orders/:inventoryId
+router.get("/:inventoryId", validateToken, async (req, res, next) => {
+  try {
+    const inventoryId = req.params.inventoryId;
+    response = await Inventory.findById(inventoryId);
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+});
 
-// //POST api/orders/new
+//POST api/orders/new
 
-// router.post("/new", validateToken, async (req, res, next) => {
-//   try {
-//     console.log(req.body);
-//     const { customerName, createdBy, totalAmount, deliveryDate, status } =
-//       req.body;
-//     const response = await Order.create({
-//       customerName,
-//       createdBy,
-//       totalAmount,
-//       deliveryDate,
-//       status,
-//     });
-//     res.status(201).json({ data: response });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.post("/new", validateToken, async (req, res, next) => {
+  try {
+    console.log(req.body);
 
-// //PUT api/order/:orderId
-// router.patch("/:orderId", validateToken, async (req, res, next) => {
-//   const orderId = req.params.orderId;
-//   const { customerName, deliveryDate, status } = req.body;
+    const {
+      sku,
+      title,
+      description,
+      imageUrl,
+      recommendedPrice,
+      cost,
+      stockedQty,
+      availableQty,
+      location,
+    } = req.body;
 
-//     const update = {};
-//     if (customerName) update.customerName = customerName;
-//     if (deliveryDate) update.deliveryDate = deliveryDate;
-//     if (status) update.status = status;
+    const response = await Inventory.create({
+      sku,
+      title,
+      description,
+      imageUrl,
+      recommendedPrice,
+      cost,
+      stockedQty,
+      availableQty,
+      location,
+    });
 
-//   try {
-//     response = await Order.findByIdAndUpdate(
-//       orderId,
-//       { $set:update },
-//       { new: true, runValidators: true }
-//     );
-//     res.status(200).json(response);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    res.status(201).json({ data: response });
+  } catch (error) {
+    next(error);
+  }
+})
 
-// //DELETE api/order/:orderId
-// router.delete("/:orderId", validateToken, async (req, res, next) => {
-//   const orderId = req.params.orderId;
+//Patch api/order/:inventoryId
+router.patch("/:inventoryId", validateToken, async (req, res, next) => {
+  const inventoryId = req.params.inventoryId;
+  const {
+    sku,
+    title,
+    description,
+    imageUrl,
+    recommendedPrice,
+    cost,
+    stockedQty,
+    availableQty,
+    location,
+  } = req.body;
 
-//   try {
-//     response = await Order.findByIdAndDelete(orderId);
-//     res.status(201).json(response);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+  const update = {};
+  if (sku) update.sku = sku;
+  if (title) update.title = title;
+  if (description) update.description = description;
+  if (imageUrl) update.imageUrl = imageUrl;
+  if (recommendedPrice !== undefined) update.recommendedPrice = recommendedPrice;
+  if (cost !== undefined) update.cost = cost;
+  if (stockedQty !== undefined) update.stockedQty = stockedQty;
+  if (availableQty !== undefined) update.availableQty = availableQty;
+  if (location) update.location = location;
 
+  try {
+    const response = await Inventory.findByIdAndUpdate(
+      inventoryId,
+      { $set: update },
+      { new: true, runValidators: true }
+    );
+    res.status(200).json({ data: response });
+  } catch (error) {
+    next(error);
+  }
+});
+//DELETE api/inventory/:inventoryId
+router.delete("/:inventoryId", validateToken, async (req, res, next) => {
+  const inventoryId = req.params.inventoryId;
+
+  try {
+    const response = await Inventory.findByIdAndDelete(inventoryId);
+    if (!response) {
+      return res.status(404).json({ message: "Inventory item not found" });
+    }
+    res.status(200).json({ data: response });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
