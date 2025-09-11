@@ -1,6 +1,3 @@
-// ❗This is an example of a User Model.
-// TODO: Please make sure you edit the User model to whatever makes sense in your project.
-
 const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema(

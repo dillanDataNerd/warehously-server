@@ -12,4 +12,7 @@ router.use("/users",userRouter)
 const authRouter=require("./auth.routes")
 router.use("/auth",authRouter)
 
+const orderRouter=require("./orders.routes")
+router.use("/orders",orderRouter)
+
 module.exports = router;
