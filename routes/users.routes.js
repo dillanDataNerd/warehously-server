@@ -11,7 +11,6 @@ router.get("/", async (req, res, next) => {
   try {
     const response = await User.find({});
     res.json(response);
-    console.log(response);
   } catch (error) {
     next();
   }

@@ -15,4 +15,7 @@ router.use("/auth",authRouter)
 const orderRouter=require("./orders.routes")
 router.use("/orders",orderRouter)
 
+const inventoryRouter=require("./inventory.routes")
+router.use("/inventory",inventoryRouter)
+
 module.exports = router;
