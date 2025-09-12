@@ -4,6 +4,8 @@ const OrderLine = require("../models/OrderLine.model");
 const Order = require("../models/Order.model");
 const Inventory = require("../models/Inventory.model");
 const validateToken = require("../middleware/auth.middleware");
+const { Types } = require("mongoose");
+
 const {
   validateOrderLinesRequest,
   updateInventory,
@@ -30,6 +32,33 @@ router.get("/:orderLineId", validateToken, async (req, res, next) => {
     next(error);
   }
 });
+
+//GET api/ordersLines/order/:orderId
+//should return 2 items 68c28ab2ca208609b3c11959
+router.get("/order/:orderId", validateToken , async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId;
+    const response = await OrderLine.find({order:new Types.ObjectId(orderId)});
+    res.status(200).json(response);
+
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+//GET api/ordersLines/inventory/:inventoryId
+// this should return 2 items 68c29fd6ca208609b3c11966
+router.get("/inventory/:inventoryId", validateToken, async (req, res, next) => {
+  try {
+    const inventoryId = req.params.inventoryId;
+    const response = await OrderLine.find({inventory:new Types.ObjectId(inventoryId)});
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 //POST api/orders/new
 
