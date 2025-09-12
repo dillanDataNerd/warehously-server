@@ -1,0 +1,82 @@
+[
+  {
+    "customerName": "Alice Johnson",
+    "createdBy": "64f8c9d1e23b3f91c8b10001",
+    "totalAmount": 120.5,
+    "deliveryDate": "2025-09-14T12:00:00.000Z",
+    "status": "draft"
+  },
+  {
+    "customerName": "Bob Smith",
+    "createdBy": "64f8c9d1e23b3f91c8b10002",
+    "totalAmount": 340,
+    "deliveryDate": "2025-09-15T15:30:00.000Z",
+    "status": "ready to pick"
+  },
+  {
+    "customerName": "Cathy Zhang",
+    "createdBy": "64f8c9d1e23b3f91c8b10003",
+    "totalAmount": 89.99,
+    "deliveryDate": "2025-09-13T09:00:00.000Z",
+    "status": "picking"
+  },
+  {
+    "customerName": "David Lee",
+    "createdBy": "64f8c9d1e23b3f91c8b10004",
+    "totalAmount": 220,
+    "deliveryDate": "2025-09-16T10:45:00.000Z",
+    "status": "ready to ship"
+  },
+  {
+    "customerName": "Emma Brown",
+    "createdBy": "64f8c9d1e23b3f91c8b10005",
+    "totalAmount": 149.75,
+    "deliveryDate": "2025-09-14T14:00:00.000Z",
+    "status": "shipped"
+  },
+  {
+    "customerName": "Frank White",
+    "createdBy": "64f8c9d1e23b3f91c8b10006",
+    "totalAmount": 65.2,
+    "deliveryDate": "2025-09-13T18:15:00.000Z",
+    "status": "draft"
+  },
+  {
+    "customerName": "Grace Kim",
+    "createdBy": "64f8c9d1e23b3f91c8b10007",
+    "totalAmount": 275,
+    "deliveryDate": "2025-09-15T12:30:00.000Z",
+    "status": "ready to pick"
+  },
+  {
+    "customerName": "Henry Wilson",
+    "createdBy": "64f8c9d1e23b3f91c8b10008",
+    "totalAmount": 500,
+    "deliveryDate": "2025-09-17T11:00:00.000Z",
+    "status": "picking"
+  },
+  {
+    "customerName": "Isabella Garcia",
+    "createdBy": "64f8c9d1e23b3f91c8b10009",
+    "totalAmount": 310.4,
+    "deliveryDate": "2025-09-16T08:00:00.000Z",
+    "status": "ready to ship"
+  },
+  {
+    "customerName": "Jack Miller",
+    "createdBy": "64f8c9d1e23b3f91c8b10010",
+    "totalAmount": 420,
+    "deliveryDate": "2025-09-18T16:00:00.000Z",
+    "status": "shipped"
+  },
+  {
+    "customerName": "marcos emporium",
+    "createdBy": "64f8c9d1e23b3f91c8b10007",
+    "totalAmount": 275,
+    "deliveryDate": null,
+    "status": "draft",
+    "createdAt": "2025-09-11T09:13:28.136Z",
+    "updatedAt": "2025-09-11T09:13:28.136Z",
+    "__v": 0
+  }
+]

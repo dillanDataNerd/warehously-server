@@ -17,37 +17,46 @@ async function validateOrderLinesRequest(req, res, next) {
 }
 
 // check that that orderlines are linked to real objects if the client sends and id
-async function validateOrderLinesReferences(req, res, next) {
-  const { order, inventory } = req.body;
+// Middleware to validate order reference (only if provided)
+async function validateOrderReference(req, res, next) {
+  const { order } = req.body;
 
   try {
     if (!order) {
-      next();
-    } else {
-      const foundOrder = await Order.findOne({ _id: order });
-      if (!foundOrder) {
-        return res
-          .status(400)
-          .json({ errorMessage: "order not found in database" });
-      }
+      return next(); // no order in request → skip
     }
 
-    if (!inventory) {
-      next();
-    } else {
-      const foundInventory = await Inventory.findOne({ _id: inventory });
-      if (!foundInventory) {
-        return res
-          .status(400)
-          .json({ errorMessage: "Inventory not found in database" });
-      }
-
-      next();
+    const foundOrder = await Order.findById(order);
+    if (!foundOrder) {
+      return res.status(400).json({ errorMessage: "order not found in database" });
     }
+
+    return next();
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
+
+// Middleware to validate inventory reference (only if provided)
+async function validateInventoryReference(req, res, next) {
+  const { inventory } = req.body;
+
+  try {
+    if (!inventory) {
+      return next(); // no inventory in request → skip
+    }
+
+    const foundInventory = await Inventory.findById(inventory);
+    if (!foundInventory) {
+      return res.status(400).json({ errorMessage: "Inventory not found in database" });
+    }
+
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+}
+
 
 async function updateInventory(req, res, next) {
   //get all available quantity data
@@ -55,9 +64,7 @@ async function updateInventory(req, res, next) {
   const { quantity, inventory } = req.body;
 
   //only continue is there is a quantity change
-  if (!quantity) {
-    return;
-  }
+  if (quantity) {
 
   // Set order lines quantity to 0 incase this is attached to a new order. If we find an associated orderLine, we update the order accordingly
   let currentOrderLineQuantity = 0;
@@ -68,8 +75,10 @@ async function updateInventory(req, res, next) {
 
   let currentAvailableInventory = null;
   let stockedInventory = null;
+
   try {
     let response = await Inventory.findById(inventory);
+    console.log(response)
     currentAvailableInventory = response.availableQty;
     stockedInventory = response.stockedQty;
   } catch (error) {
@@ -101,10 +110,42 @@ async function updateInventory(req, res, next) {
       next(error);
     }
   }
+}else{
+  next()
+}
+}
+
+// whenever orderlines are deleted it should add the inventory back to the avaiable stock
+async function updateInventoryFromDeletedOrderLine(req,res,next){
+    //get orderLine quantity
+  const orderLineId = req.params.orderLineId;
+  let orderLineQuantity= null
+  let inventoryId=null
+    try {
+    let response = await OrderLine.findById(orderLineId);
+    orderLineQuantity = response.quantity;
+    inventoryId=response.inventory
+  } catch (error) {next(error)}
+
+// add deleted order line quantity back to original inventory
+
+  try {
+      await Inventory.findByIdAndUpdate(
+        inventoryId,
+        { $inc:{availableQty: orderLineQuantity }},
+        { new: true }
+      );
+      next();
+    } catch (error) {
+      next(error);
+    }
+
 }
 
 module.exports = {
   validateOrderLinesRequest,
   updateInventory,
-  validateOrderLinesReferences,
+  validateOrderReference, 
+  validateInventoryReference,
+  updateInventoryFromDeletedOrderLine
 };
