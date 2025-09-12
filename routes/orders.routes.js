@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order.model");
+const OrderLine = require("../models/OrderLine.model")
+const Inventory = require ("../models/Inventory.model")
 const validateToken = require("../middleware/auth.middleware");
+
 
 // GET api/orders
 router.get("/", validateToken, async (req, res, next) => {
@@ -28,7 +31,6 @@ router.get("/:orderId", validateToken, async (req, res, next) => {
 
 router.post("/new", validateToken, async (req, res, next) => {
   try {
-    console.log(req.body);
     const { customerName, createdBy, totalAmount, deliveryDate, status } =
       req.body;
     const response = await Order.create({
@@ -68,15 +70,35 @@ router.patch("/:orderId", validateToken, async (req, res, next) => {
 
 //DELETE api/order/:orderId
 router.delete("/:orderId", validateToken, async (req, res, next) => {
-  const orderId = req.params.orderId;
+  const { orderId } = req.params;
 
   try {
-    response = await Order.findByIdAndDelete(orderId);
-    res.status(201).json(response);
+    // 1) Get all order lines
+    const lines = await OrderLine.find({ order: orderId });
+
+    // 2) For each order line, restore availableQty
+    for (const line of lines) {
+
+      await Inventory.updateOne(
+        { _id: line.inventory },
+        { $inc: { availableQty: line.quantity } }
+      );
+    }
+
+    // 3) Delete order lines
+    await OrderLine.deleteMany({ order: orderId });
+
+    // 4) Delete the order
+    await Order.findByIdAndDelete(orderId);
+
+    return res
+      .status(200)
+      .json({ message: "Order deleted and inventory restored." });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
+;
 
 
 module.exports = router;
