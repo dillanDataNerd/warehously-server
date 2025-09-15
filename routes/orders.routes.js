@@ -31,11 +31,11 @@ router.get("/:orderId", validateToken, async (req, res, next) => {
 
 router.post("/new", validateToken, async (req, res, next) => {
   try {
-    const { customerName, deliveryDate, createdBy, status } =
+    const { customerName, deliveryDate, status } =
       req.body;
     const response = await Order.create({
       customerName,
-      createdBy, 
+      createdBy:req.payload._id, 
       deliveryDate,
       status
     });

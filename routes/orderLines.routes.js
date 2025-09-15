@@ -45,7 +45,7 @@ router.get(
       const orderId = req.params.orderId;
       const response = await OrderLine.find({
         order: new Types.ObjectId(orderId),
-      });
+      }).populate("inventory");
       res.status(200).json(response);
     } catch (error) {
       next(error);
