@@ -7,7 +7,7 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    totalAmount: { type: Number },
+    totalAmount: { type: Number, default: 0 },
     deliveryDate: {
       type: Date,
       default: () => new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //needs function so it runs whenever a new order is created
