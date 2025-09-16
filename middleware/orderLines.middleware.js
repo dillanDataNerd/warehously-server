@@ -71,14 +71,16 @@ async function updateInventory(req, res, next) {
   try {
     let response = await OrderLine.findById(orderLineId);
     currentOrderLineQuantity = response.quantity;
+    console.log("current order line quantity: " + currentOrderLineQuantity)
   } catch (error) {}
 
   let currentAvailableInventory = null;
   let stockedInventory = null;
 
   try {
+    console.log(inventory)
     let response = await Inventory.findById(inventory);
-    console.log(response)
+    console.log("available quantity" + response)
     currentAvailableInventory = response.availableQty;
     stockedInventory = response.stockedQty;
   } catch (error) {
@@ -94,6 +96,7 @@ async function updateInventory(req, res, next) {
       errorMessage: "Not enough available inventory to make this change",
     });
   } else if (updatedAvailableInventory > stockedInventory) {
+    console.log(`Updated inventory = ${updatedAvailableInventory} stockedInventory=${stockedInventory}`)
     return res.status(400).json({
       errorMessage:
         "You can not have more available inventory than is in stock",

@@ -28,7 +28,9 @@ router.get("/", validateToken, async (req, res, next) => {
 router.get("/:orderLineId", validateToken, async (req, res, next) => {
   try {
     const orderLineId = req.params.orderLineId;
-    response = await OrderLine.findById(orderLineId);
+    response = await OrderLine.findById(orderLineId)
+    .populate("inventory")
+    .populate("order");
     res.status(200).json(response);
   } catch (error) {
     next(error);
@@ -88,7 +90,7 @@ router.post(
 
       if (!quantity || !order || !inventory || !priceEach) {
         return res.status(400).json({
-          error: "quantity, order, priceEach and inventory are required",
+          error: "quantity, priceEach and inventory are required",
         });
       }
 
@@ -137,7 +139,7 @@ console.log(req.body)
   }
 );
 
-//DELETE api/order/:orderLineId
+//DELETE api/orderLines/:orderLineId
 router.delete(
   "/:orderLineId",
   validateToken,
