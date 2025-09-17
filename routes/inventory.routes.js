@@ -3,7 +3,7 @@ const router = express.Router();
 const Inventory = require("../models/Inventory.model");
 const validateToken = require("../middleware/auth.middleware");
 
-// GET api/orders
+// GET api/inventory
 router.get("/", validateToken, async (req, res, next) => {
   try {
     const response = await Inventory.find({});
@@ -13,7 +13,7 @@ router.get("/", validateToken, async (req, res, next) => {
   }
 });
 
-//GET api/orders/:inventoryId
+//GET api/inventory/:inventoryId
 router.get("/:inventoryId", validateToken, async (req, res, next) => {
   try {
     const inventoryId = req.params.inventoryId;
@@ -24,7 +24,7 @@ router.get("/:inventoryId", validateToken, async (req, res, next) => {
   }
 });
 
-//POST api/orders/new
+//POST api/inventory/new
 
 router.post("/new", validateToken, async (req, res, next) => {
   try {
@@ -54,6 +54,13 @@ router.post("/new", validateToken, async (req, res, next) => {
       location,
     });
 
+    //there are 3 ways to handle anything in mongoose. You can also create a new object (same as above with body)
+    // and then save
+    //const inventory = new Inventory({
+    //})
+
+    //inventory.save()
+
     res.status(201).json({ data: response });
   } catch (error) {
     next(error);
@@ -62,7 +69,7 @@ router.post("/new", validateToken, async (req, res, next) => {
 
 //Patch api/order/:inventoryId
 router.patch("/:inventoryId", validateToken, async (req, res, next) => {
-  const inventoryId = req.params.inventoryId;
+  const {inventoryId} = req.params;
   const {
     sku,
     title,
@@ -87,11 +94,25 @@ router.patch("/:inventoryId", validateToken, async (req, res, next) => {
   if (location) update.location = location;
 
   try {
-    const response = await Inventory.findByIdAndUpdate(
-      inventoryId,
-      { $set: update },
-      { new: true, runValidators: true }
-    );
+
+    console.log(stockedQty)
+    console.log(availableQty)
+    console.log(stockedQty>availableQty)
+
+
+
+    // const response = await Inventory.findByIdAndUpdate(
+    //  inventoryId,
+    //  update,
+    //  { new: true, runValidators: true }
+    //);
+
+    const inventory = await Inventory.findById(inventoryId)
+
+    inventory.set(update)
+
+    await inventory.save() // call the DB in order to update the document with the information changed
+
     res.status(200).json({ data: response });
   } catch (error) {
     next(error);

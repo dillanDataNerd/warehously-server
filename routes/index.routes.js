@@ -21,4 +21,8 @@ router.use("/inventory",inventoryRouter)
 const orderLinesRouter=require("./orderLines.routes")
 router.use("/orderLines",orderLinesRouter)
 
+const uploadRoutes = require("./upload.routes");
+router.use("/upload", uploadRoutes);
+
+
 module.exports = router;

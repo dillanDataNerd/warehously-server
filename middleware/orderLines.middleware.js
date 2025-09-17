@@ -91,11 +91,11 @@ async function updateInventory(req, res, next) {
   const updatedAvailableInventory =
     currentAvailableInventory - (quantity - currentOrderLineQuantity);
 
-  if (updatedAvailableInventory < 0) {
+  if (updatedAvailableInventory <= 0) {
     return res.status(400).json({
       errorMessage: "Not enough available inventory to make this change",
     });
-  } else if (updatedAvailableInventory > stockedInventory) {
+  } else if (updatedAvailableInventory >= stockedInventory) {
     console.log(`Updated inventory = ${updatedAvailableInventory} stockedInventory=${stockedInventory}`)
     return res.status(400).json({
       errorMessage:
