@@ -18,7 +18,7 @@ router.get("/", async (req, res, next) => {
 
 // POST api/users/signup - Creates a new user in the database
 router.post("/signup", async (req, res, next) => {
-  const { email, password, firstName, lastName } = req.body[0];
+  const { email, password, firstName, lastName } = req.body;
 
   // validate inputs
   if (!email || !password || !firstName || !lastName) {

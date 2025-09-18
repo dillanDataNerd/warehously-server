@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Inventory = require("../models/Inventory.model");
+const validateNoOpenOrderlines = require ("../middleware/inventory.middleware")
 const validateToken = require("../middleware/auth.middleware");
 
 // GET api/inventory
@@ -108,7 +109,6 @@ router.patch("/:inventoryId", validateToken, async (req, res, next) => {
     //);
 
     const inventory = await Inventory.findById(inventoryId)
-
     inventory.set(update)
 
     await inventory.save() // call the DB in order to update the document with the information changed
@@ -119,7 +119,7 @@ router.patch("/:inventoryId", validateToken, async (req, res, next) => {
   }
 });
 //DELETE api/inventory/:inventoryId
-router.delete("/:inventoryId", validateToken, async (req, res, next) => {
+router.delete("/:inventoryId", validateToken,  validateNoOpenOrderlines, async (req, res, next) => {
   const inventoryId = req.params.inventoryId;
 
   try {
