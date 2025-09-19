@@ -22,10 +22,9 @@ Handles authentication, inventory, orders, and order lines with role-based acces
 - Cloudinary for image uploads  
 
 ## Backlog Functionalities
-
-- Swagger API docs (`/docs`)  
-- Reporting endpoints (stock levels, order KPIs)  
-- Order engpoints
+- link order statuses to different stages of order fulfilment
+- make fulfilled orders read only
+- make user role specific validation so only users with the correct credentials can make certain operations
 
 # Client Structure
 
@@ -86,7 +85,9 @@ Handles authentication, inventory, orders, and order lines with role-based acces
 - `auth.context` – manages user login/logout and token  
 - `theme.context` – (optional) app-wide styling  
 
-## Links
+## Other notes
+- Stock levels updated with every transcation to keep an accurate available stock log. 
+- Relationship validation called on relevant database operations to maintain data integrity.
 
 ### Collaborators
 
