@@ -10,7 +10,6 @@ const validateToken = require("../middleware/auth.middleware");
 // POST api/auth/login - Verify credentials and send token
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
-  // validate inputs
   if (!email || !password) {
     res
       .status(400)
@@ -61,8 +60,7 @@ router.get('/verify', validateToken, (req, res, next) => {
    res.status(200).json(req.payload);
 });
 
-//DELETE THIS TEST
-//GET // api/validation-test
+//GET api/validation-test
 router.get("/validation-test",validateToken, async (req, res, next) => {
 try {
     const response = await User.find({});

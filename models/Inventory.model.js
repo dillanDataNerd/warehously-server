@@ -14,8 +14,6 @@ const inventorySchema = new Schema(
       min: 0,
       validate: {
         validator: function (value) {
-          console.log("value", value)
-          console.log("this.stockedQty", this.stockedQty)
           return value <= this.stockedQty;
         },
         message: `Available quantity cannot exceed stocked quantity`
