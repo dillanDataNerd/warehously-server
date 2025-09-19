@@ -44,14 +44,19 @@ Handles authentication, inventory, orders, and order lines with role-based acces
 ## React Router Routes (React App)
 | Path               | Page             | Components         | Permissions              | Behavior                                                      |
 | ------------------ | ---------------- | ----------------- | ------------------------ | ------------------------------------------------------------ |
-| `/`                | Home             |                   | public                   | Landing page with login/signup links                         |
-| `/signup`          | Signup           |                   | anon only `<IsAnon>`     | Signup form, navigate to dashboard after signup              |
-| `/login`           | Login            |                   | anon only `<IsAnon>`     | Login form, navigate to dashboard after login                |
-| `/inventory`       | Inventory List   | InventoryTable    | user only `<IsPrivate>`  | Show all inventory items                                     |
-| `/inventory/:id`   | Inventory Detail | InventoryDetails  | user only `<IsPrivate>`  | Show item detail, edit/delete options                        |
-| `/orders`          | Orders List      | OrderTable        | user only `<IsPrivate>`  | Show all orders with statuses                                |
-| `/orders/new`      | New Order        | OrderForm         | user only `<IsPrivate>`  | Create a new order                                           |
-| `/orders/:id`      | Order Details    | OrderDetails      | user only `<IsPrivate>`  | View and edit order + lines                                  |
+| `/api/`                | Home             |                   | public                   | Starts up the renderly server                         |
+| `/api/signup`          | Signup           |                   | anon only `<IsAnon>`     | Signup form, navigate to dashboard after signup              |
+| `/api/login`           | Login            |                   | anon only `<IsAnon>`     | Login form, navigate to dashboard after login                |
+| `/api/inventory`       | Inventory List   | InventoryTable    | user only `<IsPrivate>`  | Show all inventory items                                     |
+| `/api/inventory/:id`   | Inventory Detail | InventoryDetails  | user only `<IsPrivate>`  | Show item detail, edit/delete options                        |
+| `/api/orders`          | Orders List      | OrderTable        | user only `<IsPrivate>`  | Show all orders with statuses                                |
+| `/api/orders/new`      | New Order        | OrderForm         | user only `<IsPrivate>`  | Create a new order                                           |
+| `/api/orders/:id`      | Order Details    | OrderDetails      | user only `<IsPrivate>`  | View and edit order + lines
+| `/api/orderLines`     | Order Lines (list)    | —                 | user only `<IsPrivate>`  | Returns all order lines populated with the order and inventory details             |
+| `/api/orderLines/:id` | Order Line (detail)   | —                 | user only `<IsPrivate>`  | Returns a single order line by ID                                        |
+| `/api/orderLines`     | Order Line (create)   | —                 | user only `<IsPrivate>`  | Creates a new order line `{ quantity, priceEach, order, inventory, … }`  |
+| `/api/orderLines/:id` | Order Line (update)   | —                 | user only `<IsPrivate>`  | Updates a line `{ quantity?, priceEach?, inventory?, deliveryDate? }`    |
+| `/api/orderLines/:id` | Order Line (delete)   | —                 | user only `<IsPrivate>`  | Deletes a specific order line                                            ||
 
 
 ## Services
