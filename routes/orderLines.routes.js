@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const OrderLine = require("../models/OrderLine.model");
-const Order = require("../models/Order.model");
-const Inventory = require("../models/Inventory.model");
 const validateToken = require("../middleware/auth.middleware");
 const { Types } = require("mongoose");
 
@@ -37,7 +35,7 @@ router.get("/:orderLineId", validateToken, async (req, res, next) => {
   }
 });
 
-//GET api/ordersLines/order/:orderId
+//GET api/ordersLines/order/:orderId. Get all orderlines for an order
 router.get(
   "/order/:orderId",
   validateToken,
@@ -55,7 +53,7 @@ router.get(
   }
 );
 
-//GET api/ordersLines/inventory/:inventoryId
+//GET api/ordersLines/inventory/:inventoryId. Get all orderlines for an inventory 
 router.get(
   "/inventory/:inventoryId",
   validateToken,
@@ -119,8 +117,6 @@ router.patch(
   async (req, res, next) => {
     const orderLineId = req.params.orderLineId;
     const { priceEach, quantity } = req.body;
-
-console.log(req.body)
 
     const update = {};
     if (priceEach) update.priceEach = priceEach;

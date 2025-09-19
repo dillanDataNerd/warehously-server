@@ -28,7 +28,6 @@ router.get("/:orderId", validateToken, async (req, res, next) => {
 });
 
 //POST api/orders/new
-
 router.post("/new", validateToken, async (req, res, next) => {
   try {
     const { customerName, deliveryDate, status } =
@@ -68,6 +67,7 @@ router.patch("/:orderId", validateToken, async (req, res, next) => {
 });
 
 //DELETE api/order/:orderId
+//todo check if this could be a part of the updateInventory middleware
 router.delete("/:orderId", validateToken, async (req, res, next) => {
   const { orderId } = req.params;
 

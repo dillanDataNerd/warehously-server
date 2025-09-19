@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
-// ℹ️ Test Route. Can be left and used for waking up the server if idle
+// Used for waking up the server when idle
 router.get("/", (req, res, next) => {
   console.log("connected")
-  res.json("Connected to database");
+  res.json("Server running, all good");
 });
 
 const userRouter= require("./users.routes")
@@ -21,6 +21,7 @@ router.use("/inventory",inventoryRouter)
 const orderLinesRouter=require("./orderLines.routes")
 router.use("/orderLines",orderLinesRouter)
 
+//cloudinary routes
 const uploadRoutes = require("./upload.routes");
 router.use("/upload", uploadRoutes);
 

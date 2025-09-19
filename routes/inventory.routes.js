@@ -42,7 +42,12 @@ router.post("/new", validateToken, async (req, res, next) => {
       availableQty,
       location,
     } = req.body;
-
+    
+    // Mongoose did not support the "run validotor prop" causing issues. This other inventory 
+    // method is used to get around it, which is why is is diffirent to the rest of the routes.
+    // A third way to create inventory is
+      //const inventory = new Inventory({//}  
+      //inventory.save()
     const response = await Inventory.create({
       sku,
       title,
@@ -55,12 +60,6 @@ router.post("/new", validateToken, async (req, res, next) => {
       location,
     });
 
-    //there are 3 ways to handle anything in mongoose. You can also create a new object (same as above with body)
-    // and then save
-    //const inventory = new Inventory({
-    //})
-
-    //inventory.save()
 
     res.status(201).json({ data: response });
   } catch (error) {
@@ -95,18 +94,6 @@ router.patch("/:inventoryId", validateToken, async (req, res, next) => {
   if (location) update.location = location;
 
   try {
-
-    console.log(stockedQty)
-    console.log(availableQty)
-    console.log(stockedQty>availableQty)
-
-
-
-    // const response = await Inventory.findByIdAndUpdate(
-    //  inventoryId,
-    //  update,
-    //  { new: true, runValidators: true }
-    //);
 
     const inventory = await Inventory.findById(inventoryId)
     inventory.set(update)

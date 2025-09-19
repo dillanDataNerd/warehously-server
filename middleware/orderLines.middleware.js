@@ -3,7 +3,7 @@ const Inventory = require("../models/Inventory.model");
 const mongoose = require("mongoose");
 const OrderLine = require("../models/OrderLine.model");
 
-// ensure that orderline makes sense
+// ensure that orderline quantities makes sense 
 async function validateOrderLinesRequest(req, res, next) {
   const { quantity, priceEach } = req.body;
 
@@ -16,14 +16,13 @@ async function validateOrderLinesRequest(req, res, next) {
   next();
 }
 
-// check that that orderlines are linked to real objects if the client sends and id
-// Middleware to validate order reference (only if provided)
+// check that that orderlines are linked to real objects if the client sends an id
 async function validateOrderReference(req, res, next) {
   const { order } = req.body;
 
   try {
     if (!order) {
-      return next(); // no order in request → skip
+      return next();
     }
 
     const foundOrder = await Order.findById(order);
@@ -43,7 +42,7 @@ async function validateInventoryReference(req, res, next) {
 
   try {
     if (!inventory) {
-      return next(); // no inventory in request → skip
+      return next(); 
     }
 
     const foundInventory = await Inventory.findById(inventory);
@@ -57,13 +56,12 @@ async function validateInventoryReference(req, res, next) {
   }
 }
 
-
+// Ensures when any operations are done to an orderline, the corresponding available inventory is updated as well
 async function updateInventory(req, res, next) {
   //get all available quantity data
   const orderLineId = req.params.orderLineId;
   const { quantity, inventory } = req.body;
 
-  //only continue is there is a quantity change
   if (quantity) {
 
   // Set order lines quantity to 0 incase this is attached to a new order. If we find an associated orderLine, we update the order accordingly
@@ -71,16 +69,13 @@ async function updateInventory(req, res, next) {
   try {
     let response = await OrderLine.findById(orderLineId);
     currentOrderLineQuantity = response.quantity;
-    console.log("current order line quantity: " + currentOrderLineQuantity)
   } catch (error) {}
 
   let currentAvailableInventory = null;
   let stockedInventory = null;
 
   try {
-    console.log(inventory)
     let response = await Inventory.findById(inventory);
-    console.log("available quantity" + response)
     currentAvailableInventory = response.availableQty;
     stockedInventory = response.stockedQty;
   } catch (error) {
@@ -120,7 +115,6 @@ async function updateInventory(req, res, next) {
 
 // whenever orderlines are deleted it should add the inventory back to the avaiable stock
 async function updateInventoryFromDeletedOrderLine(req,res,next){
-    //get orderLine quantity
   const orderLineId = req.params.orderLineId;
   let orderLineQuantity= null
   let inventoryId=null

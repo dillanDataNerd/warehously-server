@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+// validate authtoken before allowing the user to edit the database
 function validateToken(req, res, next) {
   try {
     const authToken = req.headers.authorization.split(" ")[1];

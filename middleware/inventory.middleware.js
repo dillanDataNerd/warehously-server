@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
 const OrderLine = require("../models/OrderLine.model");
 
-// ensure that orderline makes sense
+// ensure that inventory have no open orders associated to them before deletion. This ensures the database is properly connected
 async function validateNoOpenOrderlines(req, res, next) {
   const inventory = req.params.inventoryId;
 
